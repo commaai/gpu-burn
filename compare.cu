@@ -59,3 +59,23 @@ extern "C" __global__ void compareD(double *C, int *faultyElems, size_t iters) {
 
 	atomicAdd(faultyElems, myFaulty);
 }
+
+#include "cublas_v2.h"
+// TODO: implement compareH (fp16)
+extern "C" __global__ void compare_skip(__half *C, int *faultyElems, size_t iters);
+__global__ void compare_skip(__half *C, int *faultyElems, size_t iters) {
+	// TODO: implement in compare.ptx
+}
+// extern "C" __global__ void compareH(__half *C, int *faultyElems, size_t iters) {
+// 	size_t iterStep = blockDim.x*blockDim.y*gridDim.x*gridDim.y;
+// 	size_t myIndex = (blockIdx.y*blockDim.y + threadIdx.y)* // Y
+// 		gridDim.x*blockDim.x + // W
+// 		blockIdx.x*blockDim.x + threadIdx.x; // X
+
+// 	int myFaulty = 0;
+// 	for (size_t i = 1; i < iters; ++i)
+// 		if (fabs(C[myIndex] - C[myIndex + i*iterStep]) > EPSILOND)
+// 			myFaulty++;
+
+// 	atomicAdd(faultyElems, myFaulty);
+// }

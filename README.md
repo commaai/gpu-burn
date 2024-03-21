@@ -1,15 +1,16 @@
 # gpu-burn
 Multi-GPU CUDA stress test
-http://wili.cc/blog/gpu-burn.html
+(fork of [wilicc/gpu-burn](https://github.com/wilicc/gpu-burn))
 
-# Easy docker build and run
+# Modifications
+* adds support for FP16 (with and without tensor cores)
+* adds support for FP16 multiply FP32 accumulate (requires tensor cores)
+* change batch size for optimal FLOP/s
+* more accurately calculate FLOP/s
+* report TFLOP/s instead of GFLOP/s
 
-```
-git clone https://github.com/wilicc/gpu-burn
-cd gpu-burn
-docker build -t gpu_burn .
-docker run --rm --gpus all gpu_burn
-```
+# TODO
+* implement FP16 data comparison (check for errors)
 
 # Building
 To build GPU Burn:
@@ -62,13 +63,16 @@ can be set to change the resulting image tag:
     GPU Burn
     Usage: gpu_burn [OPTIONS] [TIME]
     
-    -m X   Use X MB of memory
-    -m N%  Use N% of the available GPU memory
-    -d     Use doubles
-    -tc    Try to use Tensor cores (if available)
-    -l     List all GPUs in the system
-    -i N   Execute only on GPU N
-    -h     Show this help message
+    -m X      Use X MB of memory
+    -m N%     Use N% of the available GPU memory
+    -fp64     Use double precision for multiply and accumulate
+    -fp32     Use single precision for multiply and accumulate
+    -fp16     Use half precision for multiply and accumulate
+    -fp16fast Use half precision for multiply and single precision for accumulate
+    -tc       Use Tensor cores (if available)
+    -l        List all GPUs in the system
+    -i N      Execute only on GPU N
+    -h        Show this help message
     
     Example:
-    gpu_burn -d 3600
+    gpu_burn -fp16fast -d 3600
