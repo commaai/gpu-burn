@@ -803,11 +803,11 @@ int main(int argc, char **argv) {
 
     std::vector<std::string> args(argv, argv + argc);
     for (size_t i = 1; i < args.size(); ++i) {
-        if (argc >= 2 && std::string(argv[i]).find("-h") != std::string::npos) {
+        if (argc >= 2 && std::string(argv[i]) == "-h") {
             showHelp();
             return 0;
         }
-        if (argc >= 2 && std::string(argv[i]).find("-l") != std::string::npos) {
+        if (argc >= 2 && std::string(argv[i]) == "-l") {
             int count = initCuda();
             if (count == 0) {
                 throw std::runtime_error("No CUDA capable GPUs found.\n");
@@ -825,29 +825,29 @@ int main(int argc, char **argv) {
             thisParam++;
             return 0;
         }
-        if (argc >= 2 && std::string(argv[i]).find("-fp64") != std::string::npos) {
+        if (argc >= 2 && std::string(argv[i]) == "-fp64") {
             dataType = DATA_TYPE::fp64;
             dataTypeSet = true;
             thisParam++;
         }
-        if (argc >= 2 && std::string(argv[i]).find("-fp32") != std::string::npos) {
+        if (argc >= 2 && std::string(argv[i]) == "-fp32") {
             dataType = DATA_TYPE::fp32;
             dataTypeSet = true;
             thisParam++;
         }
-        if (argc >= 2 && std::string(argv[i]).find("-fp16") != std::string::npos) {
+        if (argc >= 2 && std::string(argv[i]) == "-fp16") {
             dataType = DATA_TYPE::fp16;
             dataTypeSet = true;
             thisParam++;
         }
-        if (argc >= 2 && std::string(argv[i]).find("-fp16fast") != std::string::npos) {
+        if (argc >= 2 && std::string(argv[i]) == "-fp16fast") {
             dataType = DATA_TYPE::fp16fast;
             useTensorCores = true; // requires tensor cores
             dataTypeSet = true;
             thisParam++;
         }
         if (argc >= 2 &&
-            std::string(argv[i]).find("-tc") != std::string::npos) {
+            std::string(argv[i]) == "-tc") {
             useTensorCores = true;
             thisParam++;
         }
@@ -901,6 +901,11 @@ int main(int argc, char **argv) {
                 thisParam++;
             }
         }
+    }
+
+    if (argc == 1) {
+        showHelp();
+        exit(EINVAL);
     }
 
     if (!dataTypeSet) {
